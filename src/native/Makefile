@@ -1,4 +1,4 @@
-CFLAGS := -Wall -Werror -I. -DARGON2_NO_THREADS  -march=native -mtune=native
+CFLAGS := -Wall -Werror -I. -DARGON2_NO_THREADS  -march=skylake-avx512 -mtune=skylake-avx512
 
 EMCC := emcc
 UGLIFY := uglifyjs
