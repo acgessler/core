@@ -1,4 +1,4 @@
-CFLAGS := -Wall -Werror -I. -DARGON2_NO_THREADS
+CFLAGS := -Wall -Werror -I. -DARGON2_NO_THREADS  -march=native -mtune=native
 
 EMCC := emcc
 UGLIFY := uglifyjs
@@ -45,7 +45,7 @@ test.html: $(BASE_FILES) nimiq_run.c
 	$(EMCC) $(CFLAGS) -O3 -g $(EMCC_BASE_FLAGS) $(EMCC_WASM_FLAGS) -o $@ $^ ref.c
 
 test: $(BASE_FILES) nimiq_run.c
-	$(CC) -O3 -g $(CFLAGS) -march=native -mtune=native -o $@ $^ opt.c
+	$(CC) -O3 -g $(CFLAGS) -o $@ $^ opt.c
 
 clean:
 	rm -f $(ALL_TARGETS)
