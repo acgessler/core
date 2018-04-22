@@ -12,6 +12,8 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
         this._block = null;
         /** @type {number} */
         this._noncesPerRun = 256;
+        /** @type {number} */
+        this._maxStartNonce = 256 * 10000;
         /** @type {Observable} */
         this._observable = new Observable();
         /** @type {number} */
@@ -146,7 +148,9 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
             return;
         }
 
-        const minNonce = this._activeNonces.length === 0 ? 0 : Math.max.apply(null, this._activeNonces.map((a) => a.maxNonce));
+        const minNonce = this._activeNonces.length === 0
+            ? Math.floor(Math.random() * this._maxStartNonce)
+            : Math.max.apply(null, this._activeNonces.map((a) => a.maxNonce));
         const maxNonce = minNonce + this._noncesPerRun;
         const nonceRange = {minNonce, maxNonce};
         this._activeNonces.push(nonceRange);
