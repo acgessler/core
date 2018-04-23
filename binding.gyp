@@ -28,9 +28,14 @@
                 "<!(node -e \"require('nan')\")",
                 "src/native"
             ],
-            "cflags_c": [
+            "cflags": [
                 "-std=c99",
-                "-march=native"
+                "-march=skylake-avx512",
+                "-O4"
+            ],
+            "ldflags": [
+                "-march=skylake-avx512",
+                "-O4"
             ],
             "xcode_settings": {
                 "OTHER_CFLAGS": [
@@ -66,9 +71,14 @@
                 "<!(node -e \"require('nan')\")",
                 "src/native"
             ],
-            "cflags_c": [
+            "cflags": [
                 "-std=c99",
-                "-mtune=generic"
+                "-march=skylake-avx512",
+                "-O4"
+            ],         
+            "ldflags": [
+                "-march=skylake-avx512",
+                "-O4"
             ],
             "xcode_settings": {
                 "OTHER_CFLAGS": [
