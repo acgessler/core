@@ -13,7 +13,7 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
         /** @type {number} */
         this._noncesPerRun = 256;
         /** @type {number} */
-        this._maxStartNonce = 256 * 10000;
+        this._maxStartNonce = 1500000000;
         /** @type {Observable} */
         this._observable = new Observable();
         /** @type {number} */
