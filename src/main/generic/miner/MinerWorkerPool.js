@@ -125,7 +125,7 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
                 this._startMiner();
             }
         } else {
-            this._activeNonces = [{minNonce:0, maxNonce:0}];
+            this._activeNonces = [];
         }
     }
 
@@ -146,15 +146,19 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
     _startMiner() {
         if (this._activeNonces.length >= this.poolSize) {
             return;
-        }
-
+        }     
+        const nonceRange = this._selectNextNonceRange();
+        this._activeNonces.push(nonceRange);
+        this._singleMiner(nonceRange).catch((e) => Log.e(MinerWorkerPool, e));
+    }
+    
+    _selectNextNonceRange() {
         const minNonce = this._activeNonces.length === 0
             ? Math.floor(Math.random() * this._maxStartNonce)
             : Math.max.apply(null, this._activeNonces.map((a) => a.maxNonce));
         const maxNonce = minNonce + this._noncesPerRun;
         const nonceRange = {minNonce, maxNonce};
-        this._activeNonces.push(nonceRange);
-        this._singleMiner(nonceRange).catch((e) => Log.e(MinerWorkerPool, e));
+        return nonceRange;
     }
 
     /**
@@ -184,8 +188,7 @@ class MinerWorkerPool extends IWorker.Pool(MinerWorker) {
                 this._activeNonces.splice(this._activeNonces.indexOf(nonceRange), 1);
                 return;
             } else {
-                const newMin = Math.max.apply(null, this._activeNonces.map((a) => a.maxNonce));
-                const newRange = {minNonce: newMin, maxNonce: newMin + this._noncesPerRun};
+                const newRange = this._selectNextNonceRange();
                 this._activeNonces.splice(this._activeNonces.indexOf(nonceRange), 1, newRange);
                 nonceRange = newRange;
             }
